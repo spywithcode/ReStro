@@ -25,6 +25,7 @@ const defaultItem: Omit<MenuItem, 'id'> = {
     category: 'Main Course',
     imageUrl: 'https://placehold.co/600x400.png',
     isAvailable: true,
+    restaurantId: '',
 };
 
 export function MenuItemDialog({ isOpen, onOpenChange, onSave, item }: MenuItemDialogProps) {

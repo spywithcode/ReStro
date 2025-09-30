@@ -26,7 +26,8 @@ function CustomerMenuPageContent() {
     const router = useRouter();
     const [cart, setCart] = useState<CartItem[]>([]);
     const [name, setName] = useState('');
-    const [contact, setContact] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [isCartOpen, setIsCartOpen] = useState(false);
@@ -64,8 +65,8 @@ function CustomerMenuPageContent() {
 
     const handleRegistration = (e: React.FormEvent) => {
         e.preventDefault();
-        if (name && contact) {
-            setCustomerInfo({ name, contact });
+        if (name && email && phone) {
+            setCustomerInfo({ name, email, phone });
         }
     }
 
@@ -105,10 +106,10 @@ function CustomerMenuPageContent() {
     const cartTotal = cart.reduce((sum, item) => sum + item.menuItem.price * item.quantity, 0);
     const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         if (cart.length === 0 || !customerInfo) return;
 
-        const orderId = addOrder({
+        const orderId = await addOrder({
             tableNumber: parseInt(tableId as string),
             customer: customerInfo,
             items: cart.map(item => ({
@@ -164,14 +165,28 @@ function CustomerMenuPageContent() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="contact" className="text-sm font-medium">
-                                    Contact Number
+                                <Label htmlFor="email" className="text-sm font-medium">
+                                    Email Address
                                 </Label>
                                 <Input
-                                    id="contact"
-                                    value={contact}
-                                    onChange={(e) => setContact(e.target.value)}
-                                    placeholder="Enter your contact number"
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email address"
+                                    required
+                                    className="input-modern h-12"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="phone" className="text-sm font-medium">
+                                    Phone Number
+                                </Label>
+                                <Input
+                                    id="phone"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    placeholder="Enter your phone number"
                                     required
                                     className="input-modern h-12"
                                 />
@@ -245,11 +260,10 @@ function CustomerMenuPageContent() {
                                                 {cart.map(item => (
                                                     <div key={item.menuItem.id} className="flex items-center gap-4 p-4 bg-muted/50 rounded-xl">
                                                         <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                                                            <Image
+                                                            <img
                                                                 src={item.menuItem.imageUrl}
                                                                 alt={item.menuItem.name}
-                                                                fill
-                                                                className="object-cover"
+                                                                className="w-full h-full object-cover"
                                                             />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
@@ -369,11 +383,10 @@ function CustomerMenuPageContent() {
                                         <Card key={item.id} className="card-modern group overflow-hidden">
                                             <CardContent className="p-0">
                                                 <div className="relative aspect-[4/3] overflow-hidden">
-                                                    <Image
+                                                    <img
                                                         src={item.imageUrl}
                                                         alt={item.name}
-                                                        fill
-                                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                     />
                                                     <div className="absolute top-3 right-3">
                                                         <Badge className="bg-background/90 text-foreground backdrop-blur-sm">

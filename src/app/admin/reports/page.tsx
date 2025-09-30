@@ -3,10 +3,9 @@
 
 import * as React from "react"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
-import { PageHeader } from "@/components/admin/page-header"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { ChartTooltip, ChartTooltipContent, ChartContainer } from "@/components/ui/chart"
-import { reportData, OrderStatus } from "@/lib/data"
+import { reportData } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Calendar as CalendarIcon, DollarSign, ShoppingCart, Utensils } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
@@ -25,10 +24,7 @@ const COLORS = {
 
 export default function ReportsPage() {
     const { orders, menuItems } = useAppData();
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: addDays(new Date(), -30),
-        to: new Date(),
-    })
+    const [date, setDate] = React.useState<DateRange | undefined>(undefined)
 
     const filteredOrders = React.useMemo(() => {
         return orders.filter(order => {
@@ -49,15 +45,23 @@ export default function ReportsPage() {
             'Beverage': { value: 0, count: 0 }
         };
 
-        filteredOrders.forEach(order => {
+        let totalSales = 0;
+
+        filteredOrders.filter(o => o.status === 'Completed').forEach(order => {
             order.items.forEach(item => {
                 const menuItem = menuItems.find(mi => mi.id === item.menuItemId);
-                if (menuItem) {
-                    categoryMap[menuItem.category].value += menuItem.price * item.quantity;
-                    categoryMap[menuItem.category].count += item.quantity;
-                }
+                const itemPrice = menuItem ? menuItem.price : item.price;
+                const itemCategory = menuItem ? menuItem.category : 'Main Course'; // Default category if not found
+                categoryMap[itemCategory].value += itemPrice * item.quantity;
+                categoryMap[itemCategory].count += item.quantity;
+                totalSales += itemPrice * item.quantity;
             });
         });
+
+        // If no sales data, return empty array to show no data message
+        if (totalSales === 0) {
+            return [];
+        }
 
         return Object.entries(categoryMap).map(([name, data]) => ({ name, ...data }));
     }, [filteredOrders, menuItems]);
@@ -68,7 +72,7 @@ export default function ReportsPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Reports & Analytics</h1>
-                    <p className="text-muted-foreground">Analyze your restaurant's performance over time.</p>
+                    <p className="text-muted-foreground">Analyze your restaurant&apos;s performance over time.</p>
                 </div>
                 <Popover>
                     <PopoverTrigger asChild>
@@ -183,29 +187,37 @@ export default function ReportsPage() {
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <div style={{ width: "100%", height: 400 }}>
-                                 <ChartContainer config={{}} className="h-full w-full">
-                                     <ResponsiveContainer width="100%" height="90%">
-                                         <PieChart>
-                                             <Pie
-                                                 data={salesByCategory}
-                                                 cx="50%"
-                                                 cy="50%"
-                                                 labelLine={false}
-                                                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                                 outerRadius={80}
-                                                 fill="#8884d8"
-                                                 dataKey="value"
-                                             >
-                                                 {salesByCategory.map((entry, index) => (
-                                                     <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
-                                                 ))}
-                                             </Pie>
-                                             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                         </PieChart>
-                                     </ResponsiveContainer>
-                                 </ChartContainer>
-                             </div>
+                             {salesByCategory.length === 0 ? (
+                                 <div className="flex flex-col items-center justify-center h-96 text-center">
+                                     <Utensils className="h-12 w-12 text-muted-foreground mb-4" />
+                                     <h3 className="text-lg font-semibold text-foreground mb-2">No Sales Data</h3>
+                                     <p className="text-muted-foreground">No completed orders found for the selected period. Sales data will appear here once orders are completed.</p>
+                                 </div>
+                             ) : (
+                                 <div style={{ width: "100%", height: 400 }}>
+                                     <ChartContainer config={{}} className="h-full w-full">
+                                         <ResponsiveContainer width="100%" height="90%">
+                                             <PieChart>
+                                                 <Pie
+                                                     data={salesByCategory}
+                                                     cx="50%"
+                                                     cy="50%"
+                                                     labelLine={false}
+                                                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                                     outerRadius={80}
+                                                     fill="#8884d8"
+                                                     dataKey="value"
+                                                 >
+                                                     {salesByCategory.map((entry, index) => (
+                                                         <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
+                                                     ))}
+                                                 </Pie>
+                                                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                                             </PieChart>
+                                         </ResponsiveContainer>
+                                     </ChartContainer>
+                                 </div>
+                             )}
                          </CardContent>
                      </Card>
                   </div>

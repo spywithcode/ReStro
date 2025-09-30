@@ -16,6 +16,7 @@ export type MenuItem = {
   category: 'Appetizer' | 'Main Course' | 'Dessert' | 'Beverage';
   imageUrl: string;
   isAvailable: boolean;
+  restaurantId: string;
 };
 
 export type OrderStatus = 'Placed' | 'Preparing' | 'Ready' | 'Completed';
@@ -29,7 +30,8 @@ export type OrderItem = {
 
 export type CustomerInfo = {
     name: string;
-    contact: string;
+    email: string;
+    phone: string;
 }
 
 export type Order = {
@@ -41,6 +43,7 @@ export type Order = {
   timestamp: Date;
   paymentMethod?: 'Cash' | 'Online';
   customer: CustomerInfo;
+  restaurantId: string;
 };
 
 export type TableStatus = 'Free' | 'Occupied' | 'Requires-Cleaning';
@@ -66,16 +69,16 @@ const getQrCodeUrl = (restaurantId: string, tableId: number) => {
 
 
 const restaurant1Menu: MenuItem[] = [
-  { id: '1-1', name: 'Bruschetta', description: 'Grilled bread with tomatoes, garlic, basil, and olive oil.', price: 250.00, category: 'Appetizer', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
-  { id: '1-2', name: 'Spaghetti Carbonara', description: 'Pasta with eggs, cheese, pancetta, and black pepper.', price: 650.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
-  { id: '1-3', name: 'Tiramisu', description: 'Coffee-flavoured Italian dessert.', price: 300.00, category: 'Dessert', imageUrl: 'https://placehold.co/600x400.png', isAvailable: false },
-  { id: '1-4', name: 'Margherita Pizza', description: 'Classic pizza with tomatoes, mozzarella, and basil.', price: 550.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
-  { id: '1-5', name: 'Lemonade', description: 'Freshly squeezed lemonade.', price: 100.00, category: 'Beverage', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
+  { id: '1-1', name: 'Bruschetta', description: 'Grilled bread with tomatoes, garlic, basil, and olive oil.', price: 250.00, category: 'Appetizer', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'your-restaurant-id' },
+  { id: '1-2', name: 'Spaghetti Carbonara', description: 'Pasta with eggs, cheese, pancetta, and black pepper.', price: 650.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'your-restaurant-id' },
+  { id: '1-3', name: 'Tiramisu', description: 'Coffee-flavoured Italian dessert.', price: 300.00, category: 'Dessert', imageUrl: 'https://placehold.co/600x400.png', isAvailable: false, restaurantId: 'your-restaurant-id' },
+  { id: '1-4', name: 'Margherita Pizza', description: 'Classic pizza with tomatoes, mozzarella, and basil.', price: 550.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'your-restaurant-id' },
+  { id: '1-5', name: 'Lemonade', description: 'Freshly squeezed lemonade.', price: 100.00, category: 'Beverage', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'your-restaurant-id' },
 ];
 
 const restaurant1Orders: Order[] = [
-  { id: 'ORD-1-001', tableNumber: 3, customer: { name: 'John Doe', contact: '123-456-7890'}, items: [{ menuItemId: '1-2', quantity: 1, name: 'Spaghetti Carbonara', price: 650.00 }, { menuItemId: '1-5', quantity: 1, name: 'Lemonade', price: 100.00 }], status: 'Preparing', total: 750.00, timestamp: new Date(Date.now() - 5 * 60000) },
-  { id: 'ORD-1-002', tableNumber: 5, customer: { name: 'Jane Smith', contact: '098-765-4321'}, items: [{ menuItemId: '1-4', quantity: 2, name: 'Margherita Pizza', price: 550.00 }], status: 'Placed', total: 1100.00, timestamp: new Date(Date.now() - 2 * 60000) },
+  { id: 'ORD-1-001', tableNumber: 3, customer: { name: 'John Doe', email: 'john@example.com', phone: '123-456-7890'}, items: [{ menuItemId: '1-2', quantity: 1, name: 'Spaghetti Carbonara', price: 650.00 }, { menuItemId: '1-5', quantity: 1, name: 'Lemonade', price: 100.00 }], status: 'Preparing', total: 750.00, timestamp: new Date(Date.now() - 5 * 60000), restaurantId: 'your-restaurant-id' },
+  { id: 'ORD-1-002', tableNumber: 5, customer: { name: 'Jane Smith', email: 'jane@example.com', phone: '098-765-4321'}, items: [{ menuItemId: '1-4', quantity: 2, name: 'Margherita Pizza', price: 550.00 }], status: 'Placed', total: 1100.00, timestamp: new Date(Date.now() - 2 * 60000), restaurantId: 'your-restaurant-id' },
 ];
 
 const restaurant1Tables: Table[] = Array.from({ length: 8 }, (_, i) => ({
@@ -86,13 +89,13 @@ const restaurant1Tables: Table[] = Array.from({ length: 8 }, (_, i) => ({
 }));
 
 const restaurant2Menu: MenuItem[] = [
-  { id: '2-1', name: 'Paneer Tikka', description: 'Marinated cottage cheese cubes grilled to perfection.', price: 350.00, category: 'Appetizer', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
-  { id: '2-2', name: 'Butter Chicken', description: 'Classic Indian dish with grilled chicken in a spiced tomato-butter sauce.', price: 750.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
-  { id: '2-3', name: 'Gulab Jamun', description: 'Soft, melt-in-your-mouth milk-solid-based sweet.', price: 150.00, category: 'Dessert', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true },
+  { id: '2-1', name: 'Paneer Tikka', description: 'Marinated cottage cheese cubes grilled to perfection.', price: 350.00, category: 'Appetizer', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'paradise-biryani' },
+  { id: '2-2', name: 'Butter Chicken', description: 'Classic Indian dish with grilled chicken in a spiced tomato-butter sauce.', price: 750.00, category: 'Main Course', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'paradise-biryani' },
+  { id: '2-3', name: 'Gulab Jamun', description: 'Soft, melt-in-your-mouth milk-solid-based sweet.', price: 150.00, category: 'Dessert', imageUrl: 'https://placehold.co/600x400.png', isAvailable: true, restaurantId: 'paradise-biryani' },
 ];
 
 const restaurant2Orders: Order[] = [
-    { id: 'ORD-2-001', tableNumber: 1, customer: { name: 'Alice', contact: '555-555-5555'}, items: [{ menuItemId: '2-1', quantity: 2, name: 'Paneer Tikka', price: 350.00 }], status: 'Placed', total: 700.00, timestamp: new Date(Date.now() - 1 * 60000) },
+    { id: 'ORD-2-001', tableNumber: 1, customer: { name: 'Alice', email: 'alice@example.com', phone: '555-555-5555'}, items: [{ menuItemId: '2-1', quantity: 2, name: 'Paneer Tikka', price: 350.00 }], status: 'Placed', total: 700.00, timestamp: new Date(Date.now() - 1 * 60000), restaurantId: 'paradise-biryani' },
 ];
 
 const restaurant2Tables: Table[] = Array.from({ length: 10 }, (_, i) => ({

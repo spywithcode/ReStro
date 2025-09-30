@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { PageHeader } from "@/components/admin/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,6 @@ import { Label } from '@/components/ui/label';
 const orderStatuses: OrderStatus[] = ['Placed', 'Preparing', 'Ready', 'Completed'];
 
 const OrderCard = ({ order, onUpdateStatus }: { order: Order; onUpdateStatus: (id: string, status: OrderStatus) => void; }) => {
-    const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'Online'>('Cash');
 
     const getNextStatus = (): OrderStatus | null => {
         const currentIndex = orderStatuses.indexOf(order.status);
@@ -88,7 +86,7 @@ const OrderCard = ({ order, onUpdateStatus }: { order: Order; onUpdateStatus: (i
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <div className="py-4">
-                                     <RadioGroup defaultValue="Cash" onValueChange={(value: 'Cash' | 'Online') => setPaymentMethod(value)}>
+                                     <RadioGroup defaultValue="Cash">
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="Cash" id="cash" />
                                             <Label htmlFor="cash" className="text-foreground">Cash / Offline</Label>

@@ -37,7 +37,7 @@ A modern, AI-powered restaurant management system built with Next.js, TypeScript
 
 ```
 ├── src/
-│   ├── ai/                    # AI integration and flows
+│   ├── ai/                   # AI integration and flows
 │   │   ├── dev.ts            # Development AI setup
 │   │   ├── genkit.ts         # Genkit AI configuration
 │   │   └── flows/            # AI workflow definitions

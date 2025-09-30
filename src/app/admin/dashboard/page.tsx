@@ -19,12 +19,12 @@ export default function DashboardPage() {
 
   const stats = [
     {
-      title: 'Today\'s Revenue',
+      title: 'Todays Revenue',
       value: `₹${todayRevenue.toFixed(2)}`,
       icon: DollarSign,
       change: '+12%',
       changeType: 'increase' as const,
-      description: 'vs yesterday'
+      description: 'compared to yesterday'
     },
     {
       title: 'Total Orders',
@@ -32,7 +32,7 @@ export default function DashboardPage() {
       icon: ShoppingCart,
       change: '+8%',
       changeType: 'increase' as const,
-      description: 'vs yesterday'
+      description: 'compared to yesterday'
     },
     {
       title: 'Occupied Tables',
@@ -40,7 +40,7 @@ export default function DashboardPage() {
       icon: Users,
       change: '-2',
       changeType: 'decrease' as const,
-      description: 'vs yesterday'
+      description: 'compared to yesterday'
     },
     {
       title: 'Menu Items',
@@ -141,7 +141,7 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-sm text-foreground">{order.customer.name}</p>
                         <p className="text-xs text-muted-foreground sm:hidden">
-                          {order.customer.contact}
+                          {order.customer.phone}
                         </p>
                       </div>
                     </td>

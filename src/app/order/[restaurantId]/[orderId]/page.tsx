@@ -24,6 +24,7 @@ function OrderStatusPageContent() {
     const { getOrderById, restaurant, isLoading, setRestaurantId } = useAppData();
     const router = useRouter();
     const [order, setOrder] = useState(() => getOrderById(orderId));
+    const [orderLoaded, setOrderLoaded] = useState(false);
 
      useEffect(() => {
         if (restaurantId) {
@@ -36,8 +37,9 @@ function OrderStatusPageContent() {
         const updateOrderState = () => {
             const updatedOrder = getOrderById(orderId);
             setOrder(updatedOrder);
+            setOrderLoaded(true);
         };
-        
+
         // Initial load
         updateOrderState();
 
@@ -51,7 +53,7 @@ function OrderStatusPageContent() {
     }, [orderId, getOrderById]);
 
 
-    if (isLoading) {
+    if (isLoading || !orderLoaded) {
         return <div className="flex h-screen w-full items-center justify-center">Loading...</div>;
     }
 

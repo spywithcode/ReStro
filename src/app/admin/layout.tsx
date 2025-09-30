@@ -15,14 +15,13 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAppData, AppProvider } from '@/context/app-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
@@ -38,7 +37,8 @@ function AdminLayoutContent({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { restaurant, setRestaurantId, isLoading } = useAppData();
+  const router = useRouter();
+  const { restaurant, setRestaurantId, isLoading, logout, adminUser } = useAppData();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
@@ -53,6 +53,12 @@ function AdminLayoutContent({
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isLoading && !restaurant && !adminUser) {
+      router.replace('/');
+    }
+  }, [isLoading, restaurant, adminUser, router]);
 
   if (isLoading || !restaurant) {
     return (
@@ -143,10 +149,8 @@ function AdminLayoutContent({
               <p className="text-sm font-medium truncate">Admin User</p>
               <p className="text-xs text-muted-foreground truncate">{restaurant.id}</p>
             </div>
-            <Button variant="ghost" size="icon" asChild className="h-8 w-8">
-              <Link href="/">
-                <LogOut className="h-4 w-4" />
-              </Link>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={logout}>
+              <LogOut className="h-4 w-4" />
             </Button>
           </div>
         </div>

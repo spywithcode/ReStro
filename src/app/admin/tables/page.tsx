@@ -1,7 +1,6 @@
 
 "use client";
 
-import { PageHeader } from "@/components/admin/page-header";
 import { Table as TableType, TableStatus, Restaurant } from "@/lib/data";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,7 +82,7 @@ const TableCard = ({ table, restaurant, onUpdateStatus }: { table: TableType, re
                             </DialogDescription>
                         </DialogHeader>
                         <div className="flex items-center justify-center p-4">
-                            <Image src={table.qrCodeUrl} alt={`QR Code for Table ${table.id}`} width={256} height={256} className="rounded-xl border border-border" />
+                            <Image src={table.qrCodeUrl} alt={`QR Code for Table ${table.id}`} width={256} height={256} unoptimized className="rounded-xl border border-border" />
                         </div>
                     </DialogContent>
                 </Dialog>

@@ -142,11 +142,10 @@ export default function MenuPage() {
                                             <TableRow key={item.id} className="border-b border-border hover:bg-muted/50 transition-colors">
                                                 <TableCell>
                                                     <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-muted">
-                                                        <Image
+                                                        <img
                                                             alt={item.name}
                                                             src={item.imageUrl}
-                                                            fill
-                                                            className="object-cover"
+                                                            className="w-full h-full object-cover"
                                                         />
                                                     </div>
                                                 </TableCell>

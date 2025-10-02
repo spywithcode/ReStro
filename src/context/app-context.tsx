@@ -71,19 +71,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const initializeApp = async () => {
             try {
-                const storedUser = localStorage.getItem('user');
-                if (!storedUser) {
-                    // No stored user, no need to check auth
-                    setIsLoading(false);
-                    return;
-                }
-
                 // Check authentication via API
-                const response = await fetch('/api/auth/me', { credentials: 'include' });
-                if (response.status === 401) {
-                    // Token expired or invalid, clear stored user
-                    localStorage.removeItem('user');
-                } else if (response.ok) {
+                const response = await fetch('/api/auth/me');
+                if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.user) {
                         const user = data.user;
@@ -99,8 +89,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                             setRestaurantId(user.restaurantId);
                         }
                     }
-                } else {
-                    console.error('Auth check failed:', response.status);
                 }
             } catch (error) {
                 console.error('App initialization error:', error);
@@ -391,7 +379,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             // Refresh orders
             const data = await response.json();
             setOrders(prev => [...prev, data.data]);
-            return data.data.id;
+            return newOrder.id;
         } catch (error: any) {
             toast({ title: "Error", description: error?.message || "Failed to place order." });
             return '';

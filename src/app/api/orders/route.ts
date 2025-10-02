@@ -14,8 +14,7 @@ const createOrderSchema = z.object({
   })).min(1, 'Order must have at least one item'),
   customer: z.object({
     name: z.string().min(1, 'Customer name is required'),
-    phone: z.string().min(1, 'Phone number is required'),
-    email: z.string().email().optional(),
+    contact: z.string().min(1, 'Customer contact is required'),
   }),
   restaurantId: z.string().min(1, 'Restaurant ID is required'),
   paymentMethod: z.enum(['Cash', 'Online']).optional(),
@@ -69,7 +68,8 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    // Removed admin authentication to allow customers to place orders without login
+    // Check authentication and admin role
+    await requireRole(['admin'])(request);
 
     const body = await request.json();
     const validatedData = createOrderSchema.parse(body);

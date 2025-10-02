@@ -106,10 +106,10 @@ function CustomerMenuPageContent() {
     const cartTotal = cart.reduce((sum, item) => sum + item.menuItem.price * item.quantity, 0);
     const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    const handlePlaceOrder = async () => {
+    const handlePlaceOrder = () => {
         if (cart.length === 0 || !customerInfo) return;
 
-        const orderId = await addOrder({
+        const orderId = addOrder({
             tableNumber: parseInt(tableId as string),
             customer: customerInfo,
             items: cart.map(item => ({
@@ -260,10 +260,11 @@ function CustomerMenuPageContent() {
                                                 {cart.map(item => (
                                                     <div key={item.menuItem.id} className="flex items-center gap-4 p-4 bg-muted/50 rounded-xl">
                                                         <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                                                            <img
+                                                            <Image
                                                                 src={item.menuItem.imageUrl}
                                                                 alt={item.menuItem.name}
-                                                                className="w-full h-full object-cover"
+                                                                fill
+                                                                className="object-cover"
                                                             />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
@@ -383,10 +384,11 @@ function CustomerMenuPageContent() {
                                         <Card key={item.id} className="card-modern group overflow-hidden">
                                             <CardContent className="p-0">
                                                 <div className="relative aspect-[4/3] overflow-hidden">
-                                                    <img
+                                                    <Image
                                                         src={item.imageUrl}
                                                         alt={item.name}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                        fill
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                                                     />
                                                     <div className="absolute top-3 right-3">
                                                         <Badge className="bg-background/90 text-foreground backdrop-blur-sm">

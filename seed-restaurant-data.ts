@@ -87,10 +87,10 @@ async function seedData() {
 
     // Seed Tables
     const tablesData = [
-      { id: 1, capacity: 4, status: 'Free', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`http://localhost:9002/menu/${restaurantId}/1`)}` },
-      { id: 2, capacity: 2, status: 'Occupied', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`http://localhost:9002/menu/${restaurantId}/2`)}` },
-      { id: 3, capacity: 6, status: 'Free', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`http://localhost:9002/menu/${restaurantId}/3`)}` },
-      { id: 4, capacity: 4, status: 'Requires-Cleaning', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`http://localhost:9002/menu/${restaurantId}/4`)}` }
+      { id: 1, capacity: 4, status: 'Free', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002'}/menu/${restaurantId}/1`)}` },
+      { id: 2, capacity: 2, status: 'Occupied', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002'}/menu/${restaurantId}/2`)}` },
+      { id: 3, capacity: 6, status: 'Free', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002'}/menu/${restaurantId}/3`)}` },
+      { id: 4, capacity: 4, status: 'Requires-Cleaning', restaurantId, qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002'}/menu/${restaurantId}/4`)}` }
     ];
 
     // Clear existing tables for this restaurant

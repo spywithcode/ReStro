@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate QR code URL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://192.168.0.181:9002';
     const qrCodeUrl = `${baseUrl}/menu/${validatedData.restaurantId}/${validatedData.id}`;
 
     // Create new table

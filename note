@@ -1,0 +1,29 @@
+# Project Cleanup TODO
+
+## Directories to Remove
+- [x] Remove `src/app/customer/` (duplicate customer pages) - RECOVERED
+- [x] Remove `docs/` (documentation not essential for running project)
+- [x] Remove `patches/` (knex patch not used)
+- [x] Remove `src/app/menu/` (duplicate customer pages - replaced with customer/)
+- [x] Remove `src/app/order/` (duplicate customer pages - replaced with customer/)
+
+## Files to Remove
+- [x] Remove `check-restaurant.ts` (development script)
+- [x] Remove `check-user.ts` (development script)
+- [x] Remove `query-user-details.ts` (development script)
+- [x] Remove `query-user.js` (development script)
+- [x] Remove `migrate-tables.ts` (development script)
+- [x] Remove `seed-restaurant-data.ts` (development script)
+- [x] Remove `update-qr-codes.ts` (development script)
+- [x] Remove `reset-password.ts` (development script)
+- [x] Remove `.modified` (temporary file)
+- [x] Remove `stop` (temporary file)
+- [x] Remove `test-setup.sh` (development script)
+- [x] Remove `auth-test.http` (testing file)
+- [x] Remove `AUTH-TESTING-README.md` (testing documentation)
+- [x] Remove `Restaurant-API-Postman-Collection.json` (testing collection)
+- [x] Remove `src/lib/change-streams.ts` (unused library file)
+
+## Followup Steps
+- [x] Run `npm run lint` to check for any issues
+- [x] Run `npm run build` to ensure project builds correctly

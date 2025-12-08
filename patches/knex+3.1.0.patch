@@ -1,0 +1,34 @@
+diff --git a/node_modules/knex/lib/dialects/better-sqlite3/index.js b/node_modules/knex/lib/dialects/better-sqlite3/index.js
+index 724773c..594a11f 100644
+--- a/node_modules/knex/lib/dialects/better-sqlite3/index.js
++++ b/node_modules/knex/lib/dialects/better-sqlite3/index.js
+@@ -4,7 +4,7 @@
+ 
+ class Client_BetterSQLite3 extends Client_SQLite3 {
+   _driver() {
+-    return require('better-sqlite3');
++    return require('sqlite3');
+   }
+ 
+   // Get a raw connection from the database, returning a promise with the connection object.
+diff --git a/node_modules/knex/lib/knex.js b/node_modules/knex/lib/knex.js
+index 0b3dd56..6a8581e 100644
+--- a/node_modules/knex/lib/knex.js
++++ b/node_modules/knex/lib/knex.js
+@@ -51,12 +51,12 @@ function knex(config) {
+     case 'sqlite':
+     case 'sqlite3':
+       return new Client(require('./dialects/sqlite3'), config);
+-    case 'better-sqlite3':
+-      return new Client(require('./dialects/better-sqlite3'), config);
++    // case 'better-sqlite3':
++    //   return new Client(require('./dialects/better-sqlite3'), config);
+     case 'oracledb':
+       return new Client(require('./dialects/oracledb'), config);
+-    case 'mysql':
+-      return new Client(require('./dialects/mysql'), config);
++    // case 'mysql':
++    //   return new Client(require('./dialects/mysql'), config);
+     case 'mysql2':
+       return new Client(require('./dialects/mysql2'), config);
+     case 'mssql':

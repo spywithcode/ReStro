@@ -1,0 +1,167 @@
+### Restaurant Management App - JWT Authentication Test Suite
+### Use VS Code REST Client extension to run these requests
+### Base URL: http://localhost:3000
+
+### ========================================
+### 1. REGISTER NEW USER
+### ========================================
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test Restaurant Owner",
+  "email": "owner@testrestaurant.com",
+  "password": "testpassword123",
+  "mobile": "+1234567890",
+  "role": "admin",
+  "restaurantName": "Test Restaurant",
+  "restaurantDescription": "A test restaurant for API testing",
+  "restaurantAddress": "123 Test Street, Test City, TC 12345",
+  "restaurantPhone": "+1234567890",
+  "restaurantEmail": "contact@testrestaurant.com"
+}
+
+### ========================================
+### 2. REGISTER CUSTOMER
+### ========================================
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test Customer",
+  "email": "customer@testrestaurant.com",
+  "password": "customer123",
+  "mobile": "+1987654321",
+  "role": "customer"
+}
+
+### ========================================
+### 3. LOGIN AS ADMIN
+### ========================================
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner@testrestaurant.com",
+  "password": "testpassword123"
+}
+
+### ========================================
+### 4. LOGIN AS CUSTOMER
+### ========================================
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "customer@testrestaurant.com",
+  "password": "customer123"
+}
+
+### ========================================
+### 5. VERIFY TOKEN (Copy token from login response)
+### ========================================
+GET http://localhost:3000/api/auth/verify
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### ========================================
+### 6. LOGOUT
+### ========================================
+POST http://localhost:3000/api/auth/logout
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### ========================================
+### 7. TEST PROTECTED ENDPOINTS
+### ========================================
+
+### Get all restaurants (public endpoint)
+GET http://localhost:3000/api/restaurants
+
+### Get menu items (requires authentication)
+GET http://localhost:3000/api/menu
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Get orders (requires authentication)
+GET http://localhost:3000/api/orders
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Get tables (requires authentication)
+GET http://localhost:3000/api/tables
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### ========================================
+### 8. CREATE SAMPLE DATA FOR TESTING
+### ========================================
+
+### Create a menu item (requires authentication)
+POST http://localhost:3000/api/menu
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Margherita Pizza",
+  "description": "Classic pizza with tomato sauce, mozzarella, and fresh basil",
+  "price": 12.99,
+  "category": "Main Course",
+  "imageUrl": "https://example.com/pizza.jpg",
+  "isAvailable": true
+}
+
+### Create a table (requires authentication)
+POST http://localhost:3000/api/tables
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "id": 1,
+  "capacity": 4,
+  "status": "Available",
+  "qrCode": "https://example.com/qr/1"
+}
+
+### ========================================
+### 9. ERROR TESTING
+### ========================================
+
+### Test invalid login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "wrong@email.com",
+  "password": "wrongpassword"
+}
+
+### Test login with wrong password
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "owner@testrestaurant.com",
+  "password": "wrongpassword"
+}
+
+### Test access protected endpoint without token
+GET http://localhost:3000/api/menu
+
+### Test access protected endpoint with invalid token
+GET http://localhost:3000/api/menu
+Authorization: Bearer invalid.jwt.token.here
+
+### ========================================
+### 10. MONGO DB CONNECTION TEST
+### ========================================
+
+### Test database connection (if you have a health check endpoint)
+GET http://localhost:3000/api/health
+
+### ========================================
+### 11. CLEANUP TEST DATA
+### ========================================
+
+### Delete test menu item (requires authentication)
+DELETE http://localhost:3000/api/menu/menu-1234567890
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Delete test table (requires authentication)
+DELETE http://localhost:3000/api/tables/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE

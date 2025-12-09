@@ -7,7 +7,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000",
+      "value": "https://re-stro.vercel.app/",
       "type": "string"
     },
     {

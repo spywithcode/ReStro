@@ -54,6 +54,7 @@ interface AppContextType {
     updateOrderStatus: (orderId: string, status: OrderStatus) => Promise<void>;
     updateTableStatus: (tableId: number, status: TableStatus) => Promise<void>;
     addTable: (tableData: { id: number; capacity: number }) => Promise<void>;
+    deleteTable: (tableId: number) => Promise<void>;
     getOrderById: (orderId: string) => Order | undefined;
     updateAdminProfile: (profileData: { name: string; email: string; phone: string; image?: File }) => Promise<void>;
     isLoading: boolean;
@@ -455,6 +456,23 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const deleteTable = async (tableId: number) => {
+        if (!restaurantId) return;
+        try {
+            const response = await fetch(`/api/tables?id=${tableId}&restaurantId=${restaurantId}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete table');
+            }
+            setTables(prev => prev.filter(table => table.id !== tableId));
+            toast({ title: "Success", description: "Table deleted successfully." });
+        } catch (error: any) {
+            toast({ title: "Error", description: error?.message || "Failed to delete table." });
+        }
+    };
+
     const getOrderById = useCallback((orderId: string): Order | undefined => {
         return orders.find(order => order.id === orderId);
     }, []);
@@ -508,6 +526,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             updateOrderStatus,
             updateTableStatus,
             addTable,
+            deleteTable,
             getOrderById,
             updateAdminProfile,
             isLoading,

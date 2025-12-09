@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { QrCode, Users, Square, CheckSquare, XSquare, MoreVertical, Eye } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { QrCode, Users, Square, CheckSquare, XSquare, MoreVertical, Eye, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppData } from "@/context/app-context";
@@ -27,7 +28,7 @@ const StatusIcon = ({ status }: { status: TableStatus }) => {
     }
 };
 
-const TableCard = ({ table, restaurant, onUpdateStatus }: { table: TableType, restaurant: Restaurant, onUpdateStatus: (id: number, status: TableStatus) => void; }) => {
+const TableCard = ({ table, restaurant, onUpdateStatus, onDeleteTable }: { table: TableType, restaurant: Restaurant, onUpdateStatus: (id: number, status: TableStatus) => void; onDeleteTable: (id: number) => void; }) => {
     const getStatusColor = (status: TableStatus) => {
         switch (status) {
             case 'Occupied':
@@ -114,6 +115,35 @@ const TableCard = ({ table, restaurant, onUpdateStatus }: { table: TableType, re
                         >
                             Requires Cleaning
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <DropdownMenuItem
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="hover:bg-destructive hover:text-destructive-foreground"
+                                >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Delete Table
+                                </DropdownMenuItem>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-card border border-border">
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-foreground">Delete Table {table.id}</AlertDialogTitle>
+                                    <AlertDialogDescription className="text-muted-foreground">
+                                        Are you sure you want to delete this table? This action cannot be undone and will permanently remove the table from your restaurant.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="bg-secondary hover:bg-secondary/80 text-secondary-foreground">Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={() => onDeleteTable(table.id)}
+                                        className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                                    >
+                                        Delete
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </CardFooter>
@@ -122,7 +152,7 @@ const TableCard = ({ table, restaurant, onUpdateStatus }: { table: TableType, re
 };
 
 export default function TablesPage() {
-    const { tables, restaurant, updateTableStatus } = useAppData();
+    const { tables, restaurant, updateTableStatus, deleteTable } = useAppData();
 
     if (!restaurant) {
         return (
@@ -155,7 +185,7 @@ export default function TablesPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                        <TableCard table={table} restaurant={restaurant} onUpdateStatus={updateTableStatus} />
+                        <TableCard table={table} restaurant={restaurant} onUpdateStatus={updateTableStatus} onDeleteTable={deleteTable} />
                     </motion.div>
                 ))}
             </div>

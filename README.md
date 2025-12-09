@@ -114,7 +114,7 @@ A modern, AI-powered restaurant management system built with Next.js, TypeScript
    ```
 
 5. **Access the application**
-   - Admin panel: http://localhost:9002
+   - Admin panel: https://re-stro.vercel.app/
    - Use restaurant ID: `your-restaurant-id` or `paradise-biryani`
 
 ## 📜 Available Scripts

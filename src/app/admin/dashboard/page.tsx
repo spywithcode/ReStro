@@ -1,13 +1,14 @@
 "use client";
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { DollarSign, ShoppingCart, Users, Utensils, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAppData } from '@/context/app-context';
 import { OrderStatus } from '@/lib/data';
 
 export default function DashboardPage() {
-  const { orders, menuItems, tables } = useAppData();
+  const { orders, menuItems, tables, restaurant } = useAppData();
 
   const todayRevenue = orders
     .filter(o => o.status === 'Completed')
@@ -73,6 +74,13 @@ export default function DashboardPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">Here's a snapshot of your restaurant's performance today.</p>
         </div>
+        <Button
+          onClick={() => window.open(`https://re-stro.vercel.app/menu/${restaurant?.id}`, '_blank')}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-6 py-3 font-medium hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
+          <Utensils className="mr-2 h-4 w-4" />
+          View Menu
+        </Button>
       </div>
 
       {/* Stats Grid */}

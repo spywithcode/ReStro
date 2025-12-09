@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 async function resetPassword() {
   try {
-    const mongoURI = 'mongodb://localhost:27017/restaurant-app';
+    const mongoURI = 'mongodb+srv://Coder_db_user:bSd9kQf0JJVmc997@cluster0.mgimzli.mongodb.net/?appName=Cluster0';
 
     await mongoose.connect(mongoURI, {
       bufferCommands: false,
@@ -16,21 +16,31 @@ async function resetPassword() {
 
     console.log('Connected to MongoDB');
 
-    const email = 'rajesh@gmail.com';
+    const email = 'spywithcode@gmail.com';
     const newPassword = 'admin123';
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    const user = await User.findOneAndUpdate(
-      { email },
-      { hashedPassword },
-      { new: true }
-    );
+    let user = await User.findOne({ email });
 
     if (user) {
+      // Update existing user
+      user.hashedPassword = hashedPassword;
+      await user.save();
       console.log(`Password reset successfully for user: ${user._id}`);
       console.log(`New hashed password (first 10 chars): ${hashedPassword.substring(0, 10)}...`);
     } else {
-      console.log(`User not found: ${email}`);
+      // Create new user
+      user = new User({
+        name: 'Admin User',
+        email,
+        phone: '+1234567890', // Placeholder phone
+        hashedPassword,
+        role: 'admin',
+        restaurantId: 'default-restaurant' // Assuming a default or placeholder
+      });
+      await user.save();
+      console.log(`New admin user created: ${user._id}`);
+      console.log(`New hashed password (first 10 chars): ${hashedPassword.substring(0, 10)}...`);
     }
 
     await mongoose.connection.close();

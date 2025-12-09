@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate QR code URL using external QR service
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://re-stro.vercel.app/';
     const customerUrl = `${baseUrl}/customer/login/${validatedData.restaurantId}/${validatedData.id}`;
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(customerUrl)}`;
 
